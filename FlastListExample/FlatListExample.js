@@ -1,29 +1,83 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View,Image,TouchableOpacity,TextInput,Dimensions,FlatList} from 'react-native';
+import {StyleSheet, Text, View,Image,TouchableOpacity,TextInput,Dimensions,FlatList,ActivityIndicator, Platform} from 'react-native';
 import data from './data';
 import axios from 'axios';
 
 const {width} = Dimensions.get('window');
+const isIOS = Platform.OS == 'ios';
 
 export default class FlatListExample extends Component {
 
+
+  // first values
 	state = {
-		text: '',
-		contacts: []
+    text: '',
+    page: 1,
+    contacts: [],
+    allContacts: [],
+    loading: true,
+    refreshing: false
+  }
+
+  constructor(props){
+    super(props);
+    this.duringMomentum = false;
   }
 
   componentDidMount(){
     this.getContacts();
   }
   
+  // API component
   getContacts = async () => {
-    const { data: { results: contacts }} = await axios.get('https://randomuser.me/api/?results=15');
 
+    // paging
     this.setState({
-      contacts
+      loading: true,
+    });
+    
+    const { data: { results: contacts }} = await axios.get(`https://randomuser.me/api/?results=15&page=${this.state.page}`);
+    const users = [...this.state.contacts, ...contacts]; // ... -> array'i degil icindeki degerleri yerlestirir.
+
+    // refresh islemi yapildiginda 
+    if(this.state.refreshing){
+      users.reverse(); // ters cevir. En ustte yeni gelenleri goster.
+    }
+
+    // new values
+    this.setState({
+      contacts: users,
+      allContacts: contacts,
+      loading: false,
+      refreshing: false
     });
 
   };
+
+  // daha fazlasi yukleme
+  loadMore = () => {
+    if(!this.duringMomentum){
+      this.setState({
+        page: this.state.page + 1,
+      }, () => {
+        this.getContacts();
+      });
+      this.duringMomentum = false;
+    }
+
+  };
+
+
+  // refresh islemleri
+  onRefresh = () => {
+    this.setState({
+      page:  1,
+      refreshing: true
+    }, () => {
+      this.getContacts();
+    });
+  };
+
 
   renderContactsItem = ({item, index}) => {
     return(
@@ -41,10 +95,11 @@ export default class FlatListExample extends Component {
     )
   };
 
+  // arama filtreleme
   searchFilter = text =>{
-	const newData = data.filter(item => {
+	const newData = this.state.allContacts.filter(item => {
 
-		const listItem = `${item.name.toLowerCase()} ${item.company.toLowerCase()}`
+    const listItem = `${item.name.first.toLowerCase()} ${item.name.last.toLowerCase()} ${item.location.state.toLowerCase()}`
 
 		return listItem.indexOf(text.toLowerCase()) > -1;
 	})
@@ -55,11 +110,14 @@ export default class FlatListExample extends Component {
 
   };
 
+  // header area - search inputText
   renderHeader = () => {
 	  const {text} = this.state;
     return(
       <View style={styles.searchContainer}>
-		<TextInput 
+    <TextInput 
+    onFocus = {() => this.duringMomentum = true}
+    onBlur = {() => this.duringMomentum = false}
 		onChangeText = { text => {
 
 			this.setState({
@@ -75,14 +133,34 @@ export default class FlatListExample extends Component {
     )
   }
 
+  // indicator visibility
+  renderFooter = () => {
+    if(!this.state.loading) return null;
+    return(
+      <View style={{paddingVertical: 20}}>
+        {/* indicator settings */}
+        <ActivityIndicator size="large" color="green"/> 
+      </View>
+    )
+  };
+
   render() {
     return (
        <FlatList
+       ListFooterComponent={this.renderFooter()}
        ListHeaderComponent={this.renderHeader()}
        renderItem={this.renderContactsItem}
        keyExtractor={item => item.login.uuid}
-       data={this.state.contacts}/>
-     
+       data={this.state.contacts}
+
+       onEndReached={this.loadMore}
+       onEndReachedThreshold={ isIOS ? 0: .2} // ust tarafa dogru atiyor  
+       
+       refreshing={this.state.refreshing}
+       onRefresh={this.onRefresh}
+       />
+
+      
     );
   }
 }
@@ -101,7 +179,6 @@ const styles = StyleSheet.create({
     // default değeri sütun olarak hizala
   },
   text:{
-    backgroundColor: 'white',
     marginVertical: 40,
     textAlign: 'center',
     paddingVertical: 70,
