@@ -15,7 +15,6 @@ A performant interface for rendering basic, flat lists, supporting the most hand
 - ScrollToIndex support.
 - Multiple column support.
 
-
 ## Axios
 
 ![Axios](https://miro.medium.com/max/1200/1*pj6oDkFSQL7DhSP-9CFAMg.png)
