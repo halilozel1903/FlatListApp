@@ -1,4 +1,4 @@
-## FlatList
+## Flat List
 
 ![FlatList](https://s3-ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2020/07/08083248/0234f46b-e4f3-4b5b-8ebf-f9a55322b54a.jpg)
 
