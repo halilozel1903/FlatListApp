@@ -5731,10 +5731,10 @@
   "resolved" "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz"
   "version" "17.0.1"
 
-"react-native@>=0.62.0-rc.0 <0.64.0", "react-native@0.63.3":
-  "integrity" "sha512-71wq13uNo5W8QVQnFlnzZ3AD+XgUBYGhpsxysQFW/hJ8GAt/J5o+Bvhy81FXichp6IBDJDh/JgfHH2gNji8dFA=="
-  "resolved" "https://registry.yarnpkg.com/react-native/-/react-native-0.63.3.tgz"
-  "version" "0.63.3"
+"react-native@>=0.62.0-rc.0 <0.64.0", "react-native@0.63.5":
+  "integrity" "sha512-unjHZOcHek2xxPkBbyqGO//2Z/AriKTwtDzGTT/ujGMRE3odDJk8wKtZregurQ9cpTUtu1Bj5R5bJv3gQIG5zw=="
+  "resolved" "https://registry.yarnpkg.com/react-native/-/react-native-0.63.5.tgz"
+  "version" "0.63.5"
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@react-native-community/cli" "^4.10.0"
