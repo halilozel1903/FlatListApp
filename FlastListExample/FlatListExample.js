@@ -37,11 +37,11 @@ export default class FlatListExample extends Component {
     });
     
     const { data: { results: contacts }} = await axios.get(`https://randomuser.me/api/?results=15&page=${this.state.page}`);
-    const users = [...this.state.contacts, ...contacts]; // ... -> array'i degil icindeki degerleri yerlestirir.
+    const users = [...this.state.contacts, ...contacts]; // spread copies the items, not the array itself.
 
-    // refresh islemi yapildiginda 
+    // when a refresh is in progress
     if(this.state.refreshing){
-      users.reverse(); // ters cevir. En ustte yeni gelenleri goster.
+      users.reverse(); // reverse so the newest items appear at the top.
     }
 
     // new values
@@ -54,7 +54,7 @@ export default class FlatListExample extends Component {
 
   };
 
-  // daha fazlasi yukleme
+  // load more
   loadMore = () => {
     if(!this.duringMomentum){
       this.setState({
@@ -68,7 +68,7 @@ export default class FlatListExample extends Component {
   };
 
 
-  // refresh islemleri
+  // refresh handling
   onRefresh = () => {
     this.setState({
       page:  1,
@@ -95,7 +95,7 @@ export default class FlatListExample extends Component {
     )
   };
 
-  // arama filtreleme
+  // search filtering
   searchFilter = text =>{
 	const newData = this.state.allContacts.filter(item => {
 
@@ -154,7 +154,7 @@ export default class FlatListExample extends Component {
        data={this.state.contacts}
 
        onEndReached={this.loadMore}
-       onEndReachedThreshold={ isIOS ? 0: .2} // ust tarafa dogru atiyor  
+       onEndReachedThreshold={ isIOS ? 0: .2} // jumps toward the top
        
        refreshing={this.state.refreshing}
        onRefresh={this.onRefresh}
@@ -167,16 +167,16 @@ export default class FlatListExample extends Component {
 
 
 
-// Stil tanımlama islemleri
+// Style definitions
 const styles = StyleSheet.create({
-  // root hucremizdeki islemler
+  // root cell
   container: {
-    backgroundColor: '#123456', // viewlerin bulundugu alan kadar.
-    flex: 1, // ekranın tamamını kapladı.
+    backgroundColor: '#123456', // only as large as the views inside it.
+    flex: 1, // fills the whole screen.
     flexDirection: 'row',
-    // row : satır olarak hizala
-    // column: sütun olarak hizala
-    // default değeri sütun olarak hizala
+    // row: lay out as a row
+    // column: lay out as a column
+    // the default is column
   },
   text:{
     marginVertical: 40,
