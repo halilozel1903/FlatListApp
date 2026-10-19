@@ -16,16 +16,16 @@ export default class App extends Component {
 
 
 
-// Stil tanımlama islemleri
+// Style definitions
 const styles = StyleSheet.create({
-  // root hucremizdeki islemler
+  // root cell
   container: {
-    backgroundColor: '#C0C0C0', // viewlerin bulundugu alan kadar.
-    flex: 1, // ekranın tamamını kapladı.
+    backgroundColor: '#C0C0C0', // only as large as the views inside it.
+    flex: 1, // fills the whole screen.
     flexDirection: 'row',
-    // row : satır olarak hizala
-    // column: sütun olarak hizala
-    // default değeri sütun olarak hizala
+    // row: lay out as a row
+    // column: lay out as a column
+    // the default is column
   },
 
 });
