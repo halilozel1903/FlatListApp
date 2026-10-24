@@ -1,53 +1,59 @@
-## Flat List 📄 📜
+# helloWorldApp
 
-![FlatList](https://s3-ap-southeast-1.amazonaws.com/arrowhitech.com/wp-content/uploads/2020/07/08083248/0234f46b-e4f3-4b5b-8ebf-f9a55322b54a.jpg)
+React Native app that loads contacts from the Random User API (`https://randomuser.me/api/`) and shows them in a `FlatList`. Each row shows a photo, name, and state. The search field filters by first name, last name, and state. Pull to refresh reloads the first page. Reaching the end of the list requests the next page of 15 contacts.
 
-A performant interface for rendering basic, flat lists, supporting the most handy features:
+The app is in `FlastListExample/`.
 
-- Fully cross-platform.
-- Optional horizontal mode.
-- Configurable viewability callbacks.
-- Header support.
-- Footer support.
-- Separator support.
-- Pull to Refresh.
-- Scroll loading.
-- ScrollToIndex support.
-- Multiple column support.
+## Versions
 
-## Axios
+- React Native 0.63.5
+- React 16.13.1
+- Axios 1.13.6
 
-![Axios](https://miro.medium.com/max/1200/1*pj6oDkFSQL7DhSP-9CFAMg.png)
+## Requirements
 
-Promise based HTTP client for the browser and node.js
+- Node.js and Yarn 1
+- Node 17 and later: Metro 0.59 hashes with MD4. Export `NODE_OPTIONS=--openssl-legacy-provider` before `yarn start`, `yarn android`, or `yarn ios`. Without it the bundler exits with `ERR_OSSL_EVP_UNSUPPORTED`.
+- Android: JDK 11 and Android SDK 29 (min SDK 16, build-tools 29.0.2). The wrapper is Gradle 6.9.4 with Android Gradle Plugin 3.5.3. JDK 17 and later cannot start that wrapper.
+- iOS: Xcode, CocoaPods, and the Podfile’s iOS 10.0 deployment target.
 
-For more details : https://github.com/axios/axios
+## Install
 
-```react
-  getContacts = async () => {
-    const { data: { results: contacts }} = await axios.get('https://randomuser.me/api/?results=15');
-
-    this.setState({
-      contacts
-    });
-
-  };
-
+```sh
+cd FlastListExample
+yarn install
 ```
 
-**FlatList** use :
+## Run
 
-```react
-   render() {
-    return (
-       <FlatList
-       ListHeaderComponent={this.renderHeader()}
-       renderItem={this.renderContactsItem}
-       keyExtractor={item => item.login.uuid}
-       data={this.state.contacts}/>
-     
-    );
-  }
+From `FlastListExample/`:
 
+```sh
+export NODE_OPTIONS=--openssl-legacy-provider
+yarn start
 ```
 
+In another terminal, from the same directory:
+
+```sh
+# Android. JAVA_HOME must point at JDK 11.
+yarn android
+```
+
+```sh
+# iOS. Podfile.lock still records React Native 0.63.3; pod install aligns the pods with 0.63.5.
+cd ios
+pod install
+cd ..
+yarn ios
+```
+
+## Test
+
+From `FlastListExample/`:
+
+```sh
+yarn test --forceExit
+```
+
+This runs the render test in `__tests__/App-test.js`. `yarn test` without `--forceExit` prints a pass, then exits 1, because the contact request continues after Jest tears the environment down.
